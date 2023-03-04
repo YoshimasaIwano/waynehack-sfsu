@@ -1,34 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+// import React from 'react';
+// import logo from './logo.svg';
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import LoginForm from './login';
+import { Container } from 'react-bootstrap';
+import { BrowserRouter as Router, Route,  Routes } from "react-router-dom";
+
+// import LoginForm from './login';
+import './App.css';
+import { Chat } from './componets/Chat';
+import { Welcome } from './componets/Welcome';
 
 function App() {
-  const handleLogin = (username: string, password: string) => {
-    // This function will handle the login logic
-    // You can add your own implementation here
-    console.log(`Logging in with username: ${username} and password: ${password}`);
-  };
+  // const handleLogin = (username: string, password: string) => {
+  //   // This function will handle the login logic
+  //   // You can add your own implementation here
+  //   console.log(`Logging in with username: ${username} and password: ${password}`);
+  // };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-      <LoginForm onLogin={handleLogin} />
-    </div>
+    <Container className="mt-5 text-center">
+      <Router>
+        <Routes>
+          <Route path="/" element={<Welcome />}/>
+          <Route path="/Home" element={<Welcome />}/>
+          <Route path="/Chat" element={<Chat />}/>
+        </Routes>
+      </Router>
+          
+    </Container>
   );
 }
 
