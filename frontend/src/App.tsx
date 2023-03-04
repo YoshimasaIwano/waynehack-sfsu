@@ -1,8 +1,16 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import LoginForm from './login';
 
 function App() {
+  const handleLogin = (username: string, password: string) => {
+    // This function will handle the login logic
+    // You can add your own implementation here
+    console.log(`Logging in with username: ${username} and password: ${password}`);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -19,6 +27,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <LoginForm onLogin={handleLogin} />
     </div>
   );
 }
