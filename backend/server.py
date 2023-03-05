@@ -83,8 +83,8 @@ def dectation():
 
 
 if __name__ == "__main__":
-    app.debug = True
+    app.debug = False
     PORT = os.environ.get('PORT','5000')
     print("runing on: ", PORT)
-    app.run()
-    # serve(app, port=PORT)
+    # app.run()
+    serve(app, port=PORT)

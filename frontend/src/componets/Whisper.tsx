@@ -1,15 +1,10 @@
   
 export async function Dictating({params = {}, url}: any) {
-    // const DEFAULT_PARAMS = {
-    //     "file": url,
-    //     "model": "whisper-1",
-    // }
     const formData = new FormData();
     formData.append("file", url);
     formData.append("model", "whisper-1");
-    // console.log(url);
+
     console.log(formData);
-    // const params_ = { ...DEFAULT_PARAMS, ...params };
     const requestOptions = {
         method: 'POST',
         headers: {

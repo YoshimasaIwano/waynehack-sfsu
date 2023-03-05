@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { motion } from 'framer-motion';
 
 import { ChatGPT, PARAMS } from "./ChatGPT";
 import OrderConfirmation, { OrderConfirmationProps } from "./Order";
@@ -59,11 +60,6 @@ export function Chat() {
         document.body.className = className;
     }
     setBodyClassName("body-chatbot");
-    const [waitress, setWaitress] = useState<string>("");
-    const [customer, setCustomer] = useState<string>("");
-    const [text, setText] = useState('');
-
-    const navigate = useNavigate();
     const toHome = () =>  {
         navigate('/');
     }
@@ -72,40 +68,13 @@ export function Chat() {
         onClose: toHome,
         orderDetails: "",
     }
+    const [waitress, setWaitress] = useState<string>("");
+    const [customer, setCustomer] = useState<string>("");
+    const [text, setText] = useState('');
     const [state, setState] = useState(initState);
     const [detail, setDetail] = useState("");
     const [end, setEnd] = useState(false);
-
-    useEffect(()=> {
-        if (end){
-            askDetail();
-        }
-        return ()=> {
-        }
-        
-    },[end])
-
-    useEffect(()=> {
-        if (detail){
-            setState({
-                isOpen: true,
-                onClose: toHome,
-                orderDetails: detail
-            })
-        }
-    },[detail])
-
-    async function askDetail() {
-        PARAMS.messages.push(
-            {
-                role: "user",
-                content: "Thank you. The final task as a cashier is to summarize the orders in list, and tell me the total bill in a format such as 'Total: $12.00'? NOTE THAT JUST GIVE ME A LIST.",
-            }
-        )
-        const response = await ChatGPT();
-        console.log(response)
-        setDetail(response);
-    };
+    const navigate = useNavigate(); 
 
     useEffect(()=> {
         setWaitress("Hello, how can I help you?");
@@ -137,26 +106,41 @@ export function Chat() {
         setText("");
     }, [waitress])
 
+    useEffect(()=> {
+        if (end){
+            askDetail();
+        }
+        return ()=> {
+        }
+        
+    },[end])
+
+    useEffect(()=> {
+        if (detail){
+            setState({
+                isOpen: true,
+                onClose: toHome,
+                orderDetails: detail
+            })
+        }
+    },[detail])
+
     async function fetchConversation () {
         const response = await ChatGPT();
         setWaitress(response);
     };
 
-    // const handleClick = () => {
-    //     const newResponse: ResponseProps = {
-    //         who: "customer",
-    //         text: text
-    //     }
-    //     allResponses.push(newResponse);
-    //     PARAMS.messages.push(
-    //         {
-    //             role: "user",
-    //             content: text,
-    //         }
-    //     );
-    //     setCustomer(text);
-    // };
-
+    async function askDetail() {
+        PARAMS.messages.push(
+            {
+                role: "user",
+                content: "The final task as a cashier is to summarize the orders in list, and tell me the total bill in a format such as 'Total: $12.00'? NOTE THAT JUST GIVE ME A LIST. Don't say sure or something.",
+            }
+        )
+        const response = await ChatGPT();
+        // console.log(response)
+        setDetail(response);
+    };
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);
     };
@@ -181,25 +165,39 @@ export function Chat() {
       }
 
     return (
-        <Container>
-            <Conversations responses={allResponses}/>
-            <div className="row mb-5">
-                <div className="">
-                    <TextInput
-                        value={text}
-                        onChange={handleTextChange}
-                        placeholder="Type here..."
-                        onKeyDown={EnterKey}
+        <motion.div 
+            initial={{
+                opacity: 0,
+                y: -100,
+            }}
+            animate={{
+                opacity: 1,
+                y: 0,
+            }}
+            transition={{
+                duration: 0.5,
+            }}
+        >
+            <Container className="bg-chat">
+                <Conversations responses={allResponses}/>
+                <div className="row mb-5">
+                    <div className="">
+                        <TextInput
+                            value={text}
+                            onChange={handleTextChange}
+                            placeholder="Type here..."
+                            onKeyDown={EnterKey}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <OrderConfirmation 
+                        isOpen={state.isOpen} 
+                        onClose={toHome} 
+                        orderDetails={detail}
                     />
                 </div>
-            </div>
-            <div>
-                <OrderConfirmation 
-                    isOpen={state.isOpen} 
-                    onClose={toHome} 
-                    orderDetails={detail}
-                />
-            </div>
-        </Container>
+            </Container>
+        </motion.div>
     );
 }
