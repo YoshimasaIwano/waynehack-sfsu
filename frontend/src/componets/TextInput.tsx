@@ -5,9 +5,10 @@ interface TextInputProps {
     value: string;
     placeholder: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onKeyDown:  (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export const TextInput = ({ value, placeholder, onChange }: TextInputProps) => {
+export const TextInput = ({ value, placeholder, onChange , onKeyDown}: TextInputProps) => {
     return (
         <div className="form-group w-100">
             <form>
@@ -16,6 +17,7 @@ export const TextInput = ({ value, placeholder, onChange }: TextInputProps) => {
                     className="form-control rounded-left text-center w-100 rounded"
                     placeholder={placeholder}
                     onChange={onChange}
+                    onKeyDown={onKeyDown}
                     value={value}
                 />
             </form>

@@ -20,7 +20,7 @@ function Waitress({ response }: { response: string }): JSX.Element {
     return (
         <div className="d-flex justify-content-start mb-4 ">
             <div className="p-2 bg-black-20 rounded">
-                <p className="text-left mb-0">{response}</p>
+                <p className="text-left mb-0 with-nextlines">{response}</p>
             </div>
         </div>
     )
@@ -30,7 +30,7 @@ function Customer({ response }: { response: string }): JSX.Element {
     return (
         <div className="d-flex justify-content-end mb-4 ">
             <div className="p-2 bg-black-10 rounded">
-                <p className="text-right mb-0">{response}</p>
+                <p className="text-right mb-0 with-nextlines">{response}</p>
             </div>
         </div>
     )
@@ -104,9 +104,6 @@ export function Chat() {
 
     useEffect(()=> {
         setWaitress("Hello, how can I help you?");
-        return ()=> {
-
-        }
     },[])
 
     useEffect(()=> {
@@ -140,41 +137,61 @@ export function Chat() {
         setWaitress(response);
     };
 
-    const handleClick = () => {
-        const newResponse: ResponseProps = {
-            who: "customer",
-            text: text
-        }
-        allResponses.push(newResponse);
-        PARAMS.messages.push(
-            {
-                role: "user",
-                content: text,
-            }
-        );
-        setCustomer(text);
-    };
+    // const handleClick = () => {
+    //     const newResponse: ResponseProps = {
+    //         who: "customer",
+    //         text: text
+    //     }
+    //     allResponses.push(newResponse);
+    //     PARAMS.messages.push(
+    //         {
+    //             role: "user",
+    //             content: text,
+    //         }
+    //     );
+    //     setCustomer(text);
+    // };
 
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);
     };
 
+    const EnterKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            // Perform the action you want here, for example:
+            const newResponse: ResponseProps = {
+                who: "customer",
+                text: text
+            }
+            allResponses.push(newResponse);
+            PARAMS.messages.push(
+                {
+                    role: "user",
+                    content: text,
+                }
+            );
+            setCustomer(text);
+        }
+      }
+
     return (
         <Container>
             <Conversations responses={allResponses}/>
             <div className="row mb-3">
-                <div className="col-9">
+                <div className="">
                     <TextInput
                         value={text}
                         onChange={handleTextChange}
                         placeholder="Type here..."
+                        onKeyDown={EnterKey}
                     />
                 </div>
-                <div className="col-3 ">
+                {/* <div className="col-3 ">
                     <Button variant="primary" type="submit" onClick={handleClick} className="w-100 rounded">
                         Send
                     </Button>
-                </div>
+                </div> */}
             </div>
             <div>
                 <OrderConfirmation 
