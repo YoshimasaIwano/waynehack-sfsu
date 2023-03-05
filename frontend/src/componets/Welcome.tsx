@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Conversation } from "./ChatGPT";
+// import { Conversation } from "./ChatGPT";
 
 export function Welcome() {
     const navigate = useNavigate();

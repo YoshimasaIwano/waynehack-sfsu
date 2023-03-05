@@ -28,6 +28,14 @@
   color: #61dafb;
 }
 
+.bg-black-20 {
+  background-color: rgb(200, 200, 200)
+}
+
+.bg-black-10 {
+  background-color: rgb(230, 230, 230);
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

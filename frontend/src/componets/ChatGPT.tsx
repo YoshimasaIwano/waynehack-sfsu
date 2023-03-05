@@ -16,36 +16,36 @@
 //     });
 //     console.log(completion.data.choices[0].message);
 // } 
-const DEFAULT_PARAMS = {
+export let PARAMS = {
     "model": "gpt-3.5-turbo",
     "temperature": 0.9,
     "max_tokens": 516,
     "messages": [{
         role: "assistant", 
-        content: 
-            `
-            Could you act as if you were a cashier at the restaurant? 
-            Note that I'll be a customer.
-            This is the menu.
-            1. hamburger $5
-            2. cheese hamburger $6
-            3. french fries $3
-            4. drink $1
-            the set of hamburger + french fries + drink is $8
-            Just say "Hello, how can I help you today?"
-            `
+        content: `
+        Could you act as if you were a cashier at the restaurant? 
+        Note that I'll be a customer.
+        This is the menu.
+        1. hamburger $5
+        2. cheese hamburger $6
+        3. french fries $3
+        4. drink $1
+        the set of hamburger + french fries + drink is $8
+        Just say "Hello, how can I help you today?
+        
+        `
     }],
 }
   
-export async function Conversation(params = {}) {
-    const params_ = { ...DEFAULT_PARAMS, ...params };
+export async function ChatGPT() {
+    // const params_ = { ...DEFAULT_PARAMS, ...params };
     const requestOptions = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + String(process.env.REACT_APP_API_KEY)
         },
-        body: JSON.stringify(params_)
+        body: JSON.stringify(PARAMS)
     };
     const response = await fetch('https://api.openai.com/v1/chat/completions', requestOptions);
     const data = await response.json();
