@@ -54,6 +54,11 @@ function Conversations({ responses }: ConversationProps): JSX.Element {
 const allResponses: Array<ResponseProps> = []
 
 export function Chat() {
+    function setBodyClassName( className: string ) {
+        // Add a unique class name to the body element
+        document.body.className = className;
+    }
+    setBodyClassName("body-chatbot");
     const [waitress, setWaitress] = useState<string>("");
     const [customer, setCustomer] = useState<string>("");
     const [text, setText] = useState('');
@@ -178,7 +183,7 @@ export function Chat() {
     return (
         <Container>
             <Conversations responses={allResponses}/>
-            <div className="row mb-3">
+            <div className="row mb-5">
                 <div className="">
                     <TextInput
                         value={text}
@@ -187,11 +192,6 @@ export function Chat() {
                         onKeyDown={EnterKey}
                     />
                 </div>
-                {/* <div className="col-3 ">
-                    <Button variant="primary" type="submit" onClick={handleClick} className="w-100 rounded">
-                        Send
-                    </Button>
-                </div> */}
             </div>
             <div>
                 <OrderConfirmation 

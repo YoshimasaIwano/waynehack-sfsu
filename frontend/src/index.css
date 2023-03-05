@@ -5,8 +5,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
+}
+
+.body-welcome {
   background-image: url("./images/DSC00127.JPG");
-  /* background-repeat: no-repeat; */
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.body-chatbot {
+  background-image: url("./images/DSC00127.JPG");
+  background-repeat: no-repeat;
   background-size: cover;
 }
 
