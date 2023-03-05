@@ -2,9 +2,9 @@
 from flask import Flask, abort, request
 from waitress import serve
 import os
-import whisper
-from tempfile import NamedTemporaryFile
-import speech_recognition as sr
+# import whisper
+# from tempfile import NamedTemporaryFile
+# import speech_recognition as sr
 
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
