@@ -1,13 +1,15 @@
 # Smart Cashier
 
 # 1. SUMMARY
-This repository for Hiragana (Japanese letters) classifier app.  
+This repository for Smart AI cashier chatbot porject in Waynehack 2023.  
 by @YoshimasaIwano and @Kaiyu0128.  
-This is a link for the web application.
 
 # 2. Contribution List
-- **Flask**
-- **Flask**
+- Setting up AWS for deploying the our product
+- Creating React App and connecting it with Flask. 
+- Thinking what we will create and talking about it if it's possible in two days. 
+- Getting OpenAI API key and developing a basic chatbot. 
+- Improving UI/UX by attemping any possible test cases.
 
 # 3. Nagivation to Our Project
 # 3.1 Our Repository  
