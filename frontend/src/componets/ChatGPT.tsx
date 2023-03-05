@@ -19,7 +19,7 @@
 export let PARAMS = {
     "model": "gpt-3.5-turbo",
     "temperature": 0.9,
-    "max_tokens": 516,
+    "max_tokens": 2048,
     "messages": [{
         role: "assistant", 
         content: `
@@ -32,6 +32,9 @@ export let PARAMS = {
         4. drink $1
         the set of hamburger + french fries + drink is $8
         Just say "Hello, how can I help you today?
+
+        When an order is done, please confirm the order.
+        Finally, you should say Thank you.
         
         `
     }],

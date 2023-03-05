@@ -9,11 +9,11 @@ interface TextInputProps {
 
 export const TextInput = ({ value, placeholder, onChange }: TextInputProps) => {
     return (
-        <div className="form-group text-right">
+        <div className="form-group w-100">
             <form>
                 <input
                     type="text"
-                    className="form-control"
+                    className="form-control rounded-left text-center w-100 rounded"
                     placeholder={placeholder}
                     onChange={onChange}
                     value={value}

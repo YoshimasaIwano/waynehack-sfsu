@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 import { ChatGPT, PARAMS } from "./ChatGPT";
 import TextInput from "./TextInput";
@@ -16,17 +17,21 @@ type ConversationProps = {
 
 function Waitress({ response }: { response: string }): JSX.Element {
     return (
-        <p className="text-left bg-black-20">
-            {response}
-        </p>
+        <div className="d-flex justify-content-start mb-4">
+            <div className="p-2 bg-black-20 rounded">
+                <p className="text-left mb-0">{response}</p>
+            </div>
+        </div>
     )
 }
 
 function Customer({ response }: { response: string }): JSX.Element {
     return (
-        <p className="text-right bg-black-10">
-            {response}
-        </p>
+        <div className="d-flex justify-content-end mb-4">
+            <div className="p-2 bg-black-10 rounded">
+                <p className="text-right mb-0">{response}</p>
+            </div>
+        </div>
     )
 }
 
@@ -47,19 +52,20 @@ function Conversations({ responses }: ConversationProps): JSX.Element {
 
 const allResponses: Array<ResponseProps> = []
 
-
-// const waitress: string = "";
-// const customer: string = "";
-
 export function Chat() {
     const [waitress, setWaitress] = useState<string>("");
     const [customer, setCustomer] = useState<string>("");
     const [text, setText] = useState('');
 
+    const navigate = useNavigate();
+    if (waitress.includes("Thank you")) {
+        navigate('/chat')
+    }
+
     useEffect(()=> {
         setWaitress("Hello, how can I help you?");
         return ()=> {
-            
+
         }
     },[])
 
@@ -112,15 +118,21 @@ export function Chat() {
     
     return (
         <Container>
-            <Button variant="primary" type="submit" onClick={handleClick}>
-                Start Order
-            </Button>
             <Conversations responses={allResponses}/>
-            <TextInput
-                value={text}
-                onChange={handleTextChange}
-                placeholder="Type here..."
-            />
+            <div className="row">
+                <div className="col-9">
+                    <TextInput
+                        value={text}
+                        onChange={handleTextChange}
+                        placeholder="Type here..."
+                    />
+                </div>
+                <div className="col-3 ">
+                    <Button variant="primary" type="submit" onClick={handleClick} className="w-100 rounded">
+                        Send
+                    </Button>
+                </div>
+            </div>
         </Container>
     );
 }
