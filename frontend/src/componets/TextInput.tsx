@@ -5,13 +5,12 @@ interface TextInputProps {
     value: string;
     placeholder: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export const TextInput = ({ value, placeholder, onChange, onSubmit }: TextInputProps) => {
+export const TextInput = ({ value, placeholder, onChange }: TextInputProps) => {
     return (
         <div className="form-group text-right">
-            <form onSubmit={onSubmit}>
+            <form>
                 <input
                     type="text"
                     className="form-control"
@@ -19,9 +18,6 @@ export const TextInput = ({ value, placeholder, onChange, onSubmit }: TextInputP
                     onChange={onChange}
                     value={value}
                 />
-                <Button variant="primary" type="submit">
-                    Order
-                </Button>
             </form>
         </div>
     );

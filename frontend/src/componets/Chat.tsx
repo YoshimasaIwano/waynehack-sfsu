@@ -48,8 +48,8 @@ function Conversations({ responses }: ConversationProps): JSX.Element {
 const allResponses: Array<ResponseProps> = []
 
 
-const waitress: string = "";
-const customer: string = "";
+// const waitress: string = "";
+// const customer: string = "";
 
 export function Chat() {
     const [waitress, setWaitress] = useState<string>("");
@@ -57,9 +57,20 @@ export function Chat() {
     const [text, setText] = useState('');
 
     useEffect(()=> {
-        fetchConversation();
-        console.log(PARAMS)
+        setWaitress("Hello, how can I help you?");
         return ()=> {
+            
+        }
+    },[])
+
+    useEffect(()=> {
+        if (customer) {
+            fetchConversation();
+        }
+    },[customer])
+
+    useEffect(()=> {
+        if (waitress){
             const newResponse: ResponseProps = {
                 who: "waitress",
                 text: waitress
@@ -71,13 +82,13 @@ export function Chat() {
                     content: waitress,
                 }
             )
-            setText("");
-        }
-    },[customer])
+        } 
+        setText("");
+    }, [waitress])
 
     async function fetchConversation () {
-        const waitress = await ChatGPT();
-        setWaitress(waitress);
+        const response = await ChatGPT();
+        setWaitress(response);
     };
 
     const handleClick = () => {
@@ -98,72 +109,18 @@ export function Chat() {
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);
     };
-
-    
-
-    // const [input, setInput] = useState('');
-    // const [response, setResponse] = useState('');
-
-
-    // const generateResponse = async (customer: string) => {
-    //     const newCResponse: ResponseProps = {
-    //         who: "customer",
-    //         text: customer
-    //     }
-    //     allResponses.push(newCResponse);
-    //     PARAMS.messages.push(
-    //         {
-    //             role: "user",
-    //             content: customer,
-    //         }
-    //     );
-    //     const waitress = await ChatGPT();
-    //     setResponse(waitress);
-    //     return () => {
-    //         const newWResponse: ResponseProps = {
-    //             who: "waitress",
-    //             text: waitress
-    //         }
-    //         allResponses.push(newWResponse);
-    //         PARAMS.messages.push(
-    //             {
-    //                 role: "assistant",
-    //                 content: waitress,
-    //             }
-    //         )
-    //         console.log(PARAMS.messages)
-    //     }
-        
-    // };
-    
-    // const handleChange = ((event: React.ChangeEvent<HTMLInputElement>) => setInput(event.target.value));
-    
-    // useEffect(() => {
-    //     handleSubmit
-    // },[])
-
-    // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    //     e.preventDefault();
-    //     await generateResponse(input);
-    //     setInput('');
-    // };
     
     return (
         <Container>
-            {/* <Button variant="primary" type="submit" onClick={handleClick}>
+            <Button variant="primary" type="submit" onClick={handleClick}>
                 Start Order
-            </Button> */}
+            </Button>
             <Conversations responses={allResponses}/>
             <TextInput
                 value={text}
                 onChange={handleTextChange}
                 placeholder="Type here..."
-                onSubmit={handleClick}
             />
-            <p>
-                {customer}
-                {waitress}
-            </p>
         </Container>
     );
 }
