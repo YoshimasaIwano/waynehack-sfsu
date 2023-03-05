@@ -2,21 +2,38 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 
-import { ChatGPT, PARAMS } from "./ChatGPT";
+import { ChatGPT, ParamProps } from "./ChatGPT";
 import TextInput from "./TextInput";
 
-type ResponseProps = {
-    who: string,
-    text: string,
+export type MessageProps = {
+    role: string;
+    content: string;
 }
 
-type ConversationProps = {
-    responses: Array<ResponseProps>;
+const PARAMS = {
+    "model": "gpt-3.5-turbo",
+    "temperature": 0.9,
+    "max_tokens": 516,
+    "messages": [{
+        role: "assistant", 
+        content: `
+        Could you act as if you were a cashier at the restaurant? 
+        Note that I'll be a customer.
+        This is the menu.
+        1. hamburger $5
+        2. cheese hamburger $6
+        3. french fries $3
+        4. drink $1
+        the set of hamburger + french fries + drink is $8
+        Just say "Hello, how can I help you today?
+        
+        `
+    }]
 }
 
 function Waitress({ response }: { response: string }): JSX.Element {
     return (
-        <p className="text-left rounded-lg bg-black-20">
+        <p className="text-left bg-black-20 ml-0">
             {response}
         </p>
     )
@@ -24,20 +41,20 @@ function Waitress({ response }: { response: string }): JSX.Element {
 
 function Customer({ response }: { response: string }): JSX.Element {
     return (
-        <p className="text-right rounded-lg bg-black-40">
+        <p className="text-right bg-black-10 mr-0">
             {response}
         </p>
     )
 }
 
-function Conversations({ responses }: ConversationProps): JSX.Element {
+function Conversations( { responses } : { responses: MessageProps[] }): JSX.Element {
     return (
-        <div className="mt-2">
+        <div className="mt-3 rounded-lg ">
             {responses.map((response)=> {
-                if (response.who == "waitress") {
-                    return <Waitress response={response.text}/>
-                } else if (response.who == "customer") {
-                    return <Customer response={response.text}/>
+                if (response.role == "waitress") {
+                    return <Waitress response={response.content}/>
+                } else if (response.role == "customer") {
+                    return <Customer response={response.content}/>
                 }
             })
             }
@@ -45,54 +62,43 @@ function Conversations({ responses }: ConversationProps): JSX.Element {
     )
 }
 
-let allResponses: Array<ResponseProps> = []
-
-
-const waitress: string = "";
-const customer: string = "";
-
 export function Chat() {
     const [waitress, setWaitress] = useState<string>("");
-    const [customer, setCustomer] = useState<string>("");
+    // const [customer, setCustomer] = useState<string>("");
+    const [conversation, setConversation] = useState(PARAMS);
     const [text, setText] = useState('');
+    const [count, setCount] = useState(0);
+
+    // if (!waitress) {
+    //     fetchConversation();
+    // }
+
+    // useEffect(()=> {
+    //     fetchConversation();
+    // },[])
+
+    // useEffect(() => {
+    // },[conversation])
 
     useEffect(()=> {
-        const newCResponse: ResponseProps = {
-            who: "customer",
-            text: customer
+        // setConversation(conversation);
+        return () => {
+            fetchConversation();
+            setText("");
         }
-        allResponses.push(newCResponse);
-        PARAMS.messages.push(
-            {
-                role: "user",
-                content: customer,
-            }
-        );
-        setCustomer(() => "");
-    },[customer])
+    }, [conversation])
 
-    useEffect(() => {
-        const newWResponse: ResponseProps = {
-            who: "waitress",
-            text: waitress
-        }
-        allResponses.push(newWResponse);
-        PARAMS.messages.push(
-            {
-                role: "assistant",
-                content: waitress,
-            }
-        )
-    },[waitress])
-
-    async function fetchConversation () {
-        const response = await ChatGPT();
-        setWaitress(() => response);
+    async function fetchConversation() {
+        const newCoversation: ParamProps = await ChatGPT(conversation);
+        setConversation(newCoversation);
+        console.log(newCoversation);
     };
 
     const handleClick = () => {
-        setCustomer(() => text);  
-        fetchConversation();
+        conversation.messages.push({role: "user",content: text});
+        // setText("");
+        // setCount(count+1);
+        console.log(count);
     };
 
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,7 +111,7 @@ export function Chat() {
             <Button variant="primary" type="submit" onClick={handleClick}>
                 Start Order
             </Button>
-            <Conversations responses={allResponses}/>
+            <Conversations responses={conversation.messages}/>
             <TextInput
                 label="Enter Text"
                 value={text}

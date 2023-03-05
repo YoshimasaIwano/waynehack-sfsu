@@ -1,6 +1,8 @@
 
 // const { Configuration, OpenAIApi } = require("openai");
 
+import { MessageProps } from "./Chat";
+
 // const configuration = new Configuration({
 //   apiKey: process.env.REACT_APP_API_KEY,
 // });
@@ -16,7 +18,16 @@
 //     });
 //     console.log(completion.data.choices[0].message);
 // } 
-export let PARAMS = {
+export type ParamProps = {
+    model: string;
+    temperature: number;
+    max_tokens: number;
+    messages: {
+        role: string;
+        content: string;
+    }[];
+}
+const PARAMS = {
     "model": "gpt-3.5-turbo",
     "temperature": 0.9,
     "max_tokens": 516,
@@ -34,10 +45,10 @@ export let PARAMS = {
         Just say "Hello, how can I help you today?
         
         `
-    }],
+    }]
 }
   
-export async function ChatGPT() {
+export async function ChatGPT(PARAMS: ParamProps): Promise<ParamProps> {
     // const params_ = { ...DEFAULT_PARAMS, ...params };
     const requestOptions = {
         method: 'POST',
@@ -49,7 +60,8 @@ export async function ChatGPT() {
     };
     const response = await fetch('https://api.openai.com/v1/chat/completions', requestOptions);
     const data = await response.json();
-    return data.choices[0].message.content;
+    PARAMS.messages.push({role: data.choices[0].message.role, content :data.choices[0].message.content});
+    return PARAMS;
 }
 
 // `
