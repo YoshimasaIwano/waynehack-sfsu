@@ -4,6 +4,7 @@ import { Button, Container } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 import { ChatGPT, PARAMS } from "./ChatGPT";
+import OrderConfirmation, { OrderConfirmationProps } from "./Order";
 import TextInput from "./TextInput";
 
 type ResponseProps = {
@@ -17,7 +18,7 @@ type ConversationProps = {
 
 function Waitress({ response }: { response: string }): JSX.Element {
     return (
-        <div className="d-flex justify-content-start mb-4">
+        <div className="d-flex justify-content-start mb-4 ">
             <div className="p-2 bg-black-20 rounded">
                 <p className="text-left mb-0">{response}</p>
             </div>
@@ -27,7 +28,7 @@ function Waitress({ response }: { response: string }): JSX.Element {
 
 function Customer({ response }: { response: string }): JSX.Element {
     return (
-        <div className="d-flex justify-content-end mb-4">
+        <div className="d-flex justify-content-end mb-4 ">
             <div className="p-2 bg-black-10 rounded">
                 <p className="text-right mb-0">{response}</p>
             </div>
@@ -58,9 +59,48 @@ export function Chat() {
     const [text, setText] = useState('');
 
     const navigate = useNavigate();
-    if (waitress.includes("Thank you")) {
-        navigate('/chat')
+    const toHome = () =>  {
+        navigate('/');
     }
+    const initState: OrderConfirmationProps = {
+        isOpen: false,
+        onClose: toHome,
+        orderDetails: "",
+    }
+    const [state, setState] = useState(initState);
+    const [detail, setDetail] = useState("");
+    const [end, setEnd] = useState(false);
+
+    useEffect(()=> {
+        if (end){
+            askDetail();
+        }
+        return ()=> {
+        }
+        
+    },[end])
+
+    useEffect(()=> {
+        if (detail){
+            setState({
+                isOpen: true,
+                onClose: toHome,
+                orderDetails: detail
+            })
+        }
+    },[detail])
+
+    async function askDetail() {
+        PARAMS.messages.push(
+            {
+                role: "user",
+                content: "Thank you. The final task as a cashier is to summarize the orders in list, and tell me the total bill in a format such as 'Total: $12.00'? NOTE THAT JUST GIVE ME A LIST.",
+            }
+        )
+        const response = await ChatGPT();
+        console.log(response)
+        setDetail(response);
+    };
 
     useEffect(()=> {
         setWaitress("Hello, how can I help you?");
@@ -88,6 +128,9 @@ export function Chat() {
                     content: waitress,
                 }
             )
+            if (waitress.includes("Thank you") || waitress.includes("thank you")) {
+                setEnd(true);
+            }
         } 
         setText("");
     }, [waitress])
@@ -115,11 +158,11 @@ export function Chat() {
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);
     };
-    
+
     return (
         <Container>
             <Conversations responses={allResponses}/>
-            <div className="row">
+            <div className="row mb-3">
                 <div className="col-9">
                     <TextInput
                         value={text}
@@ -132,6 +175,13 @@ export function Chat() {
                         Send
                     </Button>
                 </div>
+            </div>
+            <div>
+                <OrderConfirmation 
+                    isOpen={state.isOpen} 
+                    onClose={toHome} 
+                    orderDetails={detail}
+                />
             </div>
         </Container>
     );

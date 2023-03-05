@@ -18,7 +18,7 @@ function App() {
   // };
 
   return (
-    <Container className="mt-5 text-center">
+    <Container className="mt-5 text-center w-75">
       <Router>
         <Routes>
           <Route path="/" element={<Welcome />}/>

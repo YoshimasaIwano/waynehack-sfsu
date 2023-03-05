@@ -1,65 +1,30 @@
 import React, { useState } from "react";
+import { Button } from "react-bootstrap";
 
-interface OrderConfirmationProps {
-  isOpen: boolean;
-  onClose: () => void;
-  orderDetails: {
-    orderItems: {
-      name: string;
-      price: number;
-    }[];
-    total: number;
-    deliveryAddress: string;
-  };
+export type OrderConfirmationProps = {
+    isOpen: boolean;
+    onClose: () => void;
+    orderDetails: string;
 }
 
 const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
-  isOpen,
-  onClose,
-  orderDetails,
-}) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
-
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    // Send order details to server and wait for response
-    // Once response is received, setIsSubmitting(false) and setHasSubmitted(true)
-  };
-
-  return isOpen ? (
-    <div className="popup">
-      <div className="popup-inner">
-        <h2>Order Confirmation</h2>
-        <div className="order-details">
-          <h3>Order Items:</h3>
-          <ul>
-            {orderDetails.orderItems.map((item) => (
-              <li key={item.name}>
-                {item.name} - ${item.price}
-              </li>
-            ))}
-          </ul>
-          <p>
-            <strong>Total:</strong> ${orderDetails.total}
-          </p>
-          <p>
-            <strong>Delivery Address:</strong> {orderDetails.deliveryAddress}
-          </p>
+    isOpen,
+    onClose,
+    orderDetails,
+    }) => {
+    return isOpen ? (
+        <div className="popup">
+            <div className="popup-inner">
+                <h2>Order Confirmation</h2>
+                <p className="order-details with-nextlines"> {orderDetails} </p>
+                <div className="button-container">
+                    <Button variant="secondary" onClick={onClose} className="rounded">
+                        Home
+                    </Button>
+                </div>
+            </div>
         </div>
-        {hasSubmitted ? (
-          <p>Thank you for your order!</p>
-        ) : (
-          <>
-            <button onClick={handleSubmit} disabled={isSubmitting}>
-              {isSubmitting ? "Submitting..." : "Submit Order"}
-            </button>
-            <button onClick={onClose}>Cancel</button>
-          </>
-        )}
-      </div>
-    </div>
-  ) : null;
+    ) : null;
 };
 
 export default OrderConfirmation;
