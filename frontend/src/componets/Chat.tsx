@@ -10,7 +10,7 @@ export type MessageProps = {
     content: string;
 }
 
-const PARAMS = {
+let PARAMS = {
     "model": "gpt-3.5-turbo",
     "temperature": 0.9,
     "max_tokens": 516,
@@ -47,77 +47,87 @@ function Customer({ response }: { response: string }): JSX.Element {
     )
 }
 
-function Conversations( { responses } : { responses: MessageProps[] }): JSX.Element {
-    return (
-        <div className="mt-3 rounded-lg ">
-            {responses.map((response)=> {
-                if (response.role == "waitress") {
-                    return <Waitress response={response.content}/>
-                } else if (response.role == "customer") {
-                    return <Customer response={response.content}/>
-                }
-            })
-            }
-        </div>
-    )
-}
-
 export function Chat() {
     const [waitress, setWaitress] = useState<string>("");
-    // const [customer, setCustomer] = useState<string>("");
-    const [conversation, setConversation] = useState(PARAMS);
+    const [customer, setCustomer] = useState<string>("");
+    // const [conversation, setConversation] = useState(PARAMS);
     const [text, setText] = useState('');
-    const [count, setCount] = useState(0);
+    // const [count, setCount] = useState(0);
 
     // if (!waitress) {
     //     fetchConversation();
     // }
 
-    // useEffect(()=> {
-    //     fetchConversation();
-    // },[])
+    useEffect(()=> {
+        if (customer) {
+            fetchConversation();
+        }
+        // return () => {
+            // setConversation(conversation);
+        // }
+        return () => {}
+    },[])
 
     // useEffect(() => {
     // },[conversation])
 
-    useEffect(()=> {
-        // setConversation(conversation);
-        return () => {
-            fetchConversation();
-            setText("");
-        }
-    }, [conversation])
+    // useEffect(()=> {
+    //     // setConversation(conversation);
+    //     return () => {
+    //         fetchConversation();
+    //         setText("");
+    //     }
+    // }, [])
 
     async function fetchConversation() {
-        const newCoversation: ParamProps = await ChatGPT(conversation);
-        setConversation(newCoversation);
-        console.log(newCoversation);
+        const response: MessageProps = await ChatGPT(PARAMS);
+        PARAMS.messages.push({role: "waitress",content: response.content});
+        setWaitress(response.content);
+        console.log(PARAMS);
     };
 
-    const handleClick = () => {
-        conversation.messages.push({role: "user",content: text});
+    const handleClick = (event: React.FormEvent<HTMLFormElement>) =>{
+        event.preventDefault()
+        PARAMS.messages.push({role: "user",content: text});
+        setCustomer(text);
+        setText("");
         // setText("");
         // setCount(count+1);
-        console.log(count);
+        // console.log(count);
     };
 
     const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setText(event.target.value);
     };
     
+    function Conversations( { responses } : { responses: MessageProps[] }): JSX.Element {
+        return (
+            <div className="mt-3 rounded-lg ">
+                {responses.map((response)=> {
+                    if (response.role == "waitress") {
+                        return <Waitress response={response.content}/>
+                    } else if (response.role == "customer") {
+                        return <Customer response={response.content}/>
+                    }
+                })
+                }
+            </div>
+        )
+    };
     
     return (
         <Container>
-            <Button variant="primary" type="submit" onClick={handleClick}>
-                Start Order
-            </Button>
-            <Conversations responses={conversation.messages}/>
+            <Conversations responses={PARAMS.messages}/>
             <TextInput
-                label="Enter Text"
                 value={text}
                 onChange={handleTextChange}
                 placeholder="Type here..."
+                onSubmit={handleClick}
             />
+            <p>
+                {customer}
+                {waitress}
+            </p>
         </Container>
     );
 }

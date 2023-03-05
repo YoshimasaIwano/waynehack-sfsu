@@ -1,24 +1,28 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-interface TextInputProps {
-    label: string;
+export type TextInputProps = {
     value: string;
     placeholder: string;
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-export const TextInput = ({ label, value, placeholder, onChange }: TextInputProps) => {
+export const TextInput = ({ value, placeholder, onChange, onSubmit }: TextInputProps) => {
     return (
         <div className="form-group text-right">
-        <label>{label}</label>
-        <input
-            type="text"
-            className="form-control"
-            placeholder={placeholder}
-            onChange={onChange}
-            value={value}
-        />
+            <form onSubmit={onSubmit}>
+                <input
+                    type="text"
+                    className="form-control"
+                    placeholder={placeholder}
+                    onChange={onChange}
+                    value={value}
+                />
+            </form>
+            <Button variant="primary" type="submit">
+                Order
+            </Button>
         </div>
     );
 };
