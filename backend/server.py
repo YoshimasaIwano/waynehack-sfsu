@@ -4,6 +4,7 @@ from waitress import serve
 import os
 import whisper
 from tempfile import NamedTemporaryFile
+import speech_recognition as sr
 
 
 app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
@@ -40,8 +41,7 @@ def index():
 
 #     # This will be automatically converted to JSON.
 #     return {'results': results}
-
-@app.route('/dictate', methods=['POST'])
+"""
 def dectation():
     model = whisper.load_model("base")
 
@@ -63,7 +63,23 @@ def dectation():
     # print the recognized text
     print(result.text)
     return result.text
+"""
+@app.route('/dictate', methods=['POST'])
+def dectation():
+    r = sr.Recognizer()
 
+    with sr.Microphone(device_index=0) as source:
+        print('Recording:')
+        audio = r.listen(source)
+
+    try:
+        text = r.recognize_google(audio, language='en-in')
+        print(text)
+        with open("record.wav", "wb") as f:
+            f.write(audio.get_raw_data())
+    except:
+        print("Not being recorded")
+    return text.text
 
 
 if __name__ == "__main__":
