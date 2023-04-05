@@ -1,66 +1,71 @@
-import { motion } from "framer-motion";
-import { Button } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { motion } from 'framer-motion';
+import { Button, Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useState } from "react";
+import { useState } from 'react';
 
 import menuImage from '../..//src/images/DALL·E 2023-03-05 09.38.50 - a image that includes hamburger, fries, and drinks.png';
 
 const menu: string = menuImage;
 
-
 export function Welcome() {
-    function setBodyClassName( className: string ) {
-        // Add a unique class name to the body element
-        document.body.className = className;
-    }
-    setBodyClassName("body-welcome");
-    const navigate = useNavigate();
+  function setBodyClassName(className: string) {
+    // Add a unique class name to the body element
+    document.body.className = className;
+  }
+  setBodyClassName('body-welcome');
 
-    const FullScreenContainer = styled.div`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 105vh;
-        width: 125vh;
-        `;
+  const navigate = useNavigate();
 
-    const StyledButton = styled(Button)`
-        font-size: 18px;
-        padding: 12px 24px;
-        border-radius: 12px;
-        `;
+  // const FullScreenContainer = styled.div`
+  //     display: flex;
+  //     justify-content: center;
+  //     align-items: center;
+  //     height: 105vh;
+  //     width: 125vh;
+  //     `;
 
-        const [show, setShow] = useState(false);
-        
-        function handleClose() {
-            setShow(false);
-        }
-        function handleShow() {
-            setShow(true);
-        }
-         
-        
-    
-    return (
-        <motion.div 
-            initial={{
-                opacity: 0,
-                y: -100,
-            }}
-            animate={{
-                opacity: 1,
-                y: 0,
-            }}
-            transition={{
-                duration: 0.5,
-            }}
-        >
-            <FullScreenContainer>
-                <StyledButton variant="primary" type="submit" onClick={() => navigate('/chat')}>
-                    Start to Order
-                </StyledButton>
-            </FullScreenContainer>
-        </motion.div>
-    )
+  const StyledButton = styled(Button)`
+    font-size: 18px;
+    padding: 12px 24px;
+    border-radius: 12px;
+    position: center;
+  `;
+
+  // const [show, setShow] = useState(false);
+
+  // function handleClose() {
+  //     setShow(false);
+  // }
+  // function handleShow() {
+  //     setShow(true);
+  // }
+
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: -100
+      }}
+      animate={{
+        opacity: 1,
+        y: 0
+      }}
+      transition={{
+        duration: 0.5
+      }}
+    >
+      <Container className="welcome ">
+        <div className="h-100 d-flex align-items-center justify-content-center">
+          <StyledButton
+            variant="primary"
+            type="submit"
+            onClick={() => navigate('/chat')}
+          >
+            Start to Order
+          </StyledButton>
+        </div>
+      </Container>
+    </motion.div>
+  );
 }

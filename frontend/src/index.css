@@ -8,10 +8,17 @@ body {
   
 }
 
-.body-welcome {
+.welcome {
   background-image: url("./images//My project-1 (1).png");
   background-repeat: no-repeat;
   background-size: cover;
+  height: 800px;
+  background-position: center;
+  
+}
+
+.body-welcome {
+  background-color: rgb(250, 191, 80)
 }
 
 .body-chatbot {

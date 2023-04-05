@@ -1,12 +1,11 @@
-
-
 export const PARAMS = {
-    "model": "gpt-3.5-turbo",
-    "temperature": 0.9,
-    "max_tokens": 1024,
-    "messages": [{
-        role: "assistant", 
-        content: `
+  model: 'gpt-3.5-turbo',
+  temperature: 0.9,
+  max_tokens: 512,
+  messages: [
+    {
+      role: 'assistant',
+      content: `
         Could you act as if you were a cashier at the restaurant? 
         Note that I'll be a customer.
         This is the menu.
@@ -22,19 +21,23 @@ export const PARAMS = {
         Finally, you should say Thank you.
         
         `
-    }],
-}
-  
+    }
+  ]
+};
+
 export async function ChatGPT() {
-    const requestOptions = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + String(process.env.REACT_APP_API_KEY)
-        },
-        body: JSON.stringify(PARAMS)
-    };
-    const response = await fetch('https://api.openai.com/v1/chat/completions', requestOptions);
-    const data = await response.json();
-    return data.choices[0].message.content;
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + String(process.env.REACT_APP_API_KEY)
+    },
+    body: JSON.stringify(PARAMS)
+  };
+  const response = await fetch(
+    'https://api.openai.com/v1/chat/completions',
+    requestOptions
+  );
+  const data = await response.json();
+  return data.choices[0].message.content;
 }
