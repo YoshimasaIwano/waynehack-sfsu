@@ -107,6 +107,7 @@ export function Chat() {
     if (end) {
       askDetail();
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     return () => {};
   }, [end]);
 
