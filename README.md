@@ -14,7 +14,7 @@ by @YoshimasaIwano and @Kaiyu0128.
 # 3. Nagivation to Our Project
 # 3.1 Our Repository  
 Here is the link for our page.  
-https://waynehackingfsu.net/  
+https://waynehack.web.app/
   
 The structure of our repository is as follow.
 - **frontend**
